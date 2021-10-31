@@ -5,29 +5,20 @@ const logger=require('./middleware/logger');
 const members=require('./Members');
 const app=express();
 
-//init middleware
-//app.use(logger);
-
-//handlesbars middlware
 app.engine('handlebars',exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 //body parser middleware.
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 
-//homepage route
 app.get('/',(req,res)=> res.render('index',{
     title: 'Member App',
     members
-} ))
+}))
 
-//set static folder
 app.use(express.static(path.join(__dirname,'public')));
-
-//members APi routes
 app.use('/api/members',require('./routes/api/members'));
+const PORT=process.env.PORT || 3000;
 
-const PORT=process.env.PORT||5000;
-
-app.listen(PORT, ()=>console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
